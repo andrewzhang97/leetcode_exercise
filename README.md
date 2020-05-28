@@ -1,2 +1,3 @@
 # leetcode_exercise
-leetcode 刷题找工作
+leetcode 练习
+一个失业青年的挣扎
