@@ -656,4 +656,131 @@ public:
     }
 };
 
+//leetcode14
+//编写一个函数来查找字符串数组中的最长公共前缀。
+//
+//如果不存在公共前缀，返回空字符串 ""。
+//
+//示例 1:
+//
+//输入: ["flower","flow","flight"]
+//输出: "fl"
+//示例 2:
+//
+//输入: ["dog","racecar","car"]
+//输出: ""
+//解释: 输入不存在公共前缀。
+class Solution_commonpreflix {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string res;
+        if(strs.size()==0){
+            return res;
+        }
+        for(int i=0;i<strs[0].size();i++){
+            char c=strs[0][i];
+            for(int j=0;j<strs.size();j++){
+                if(i>strs[j].size()){
+                    return res;
+                }
+                if(c!=strs[j][i]){
+                    return res;
+                }
+            }
+            res=res+c;
+        }
+        return res;
+    }
+};
 
+//leetcode 20
+//20. 有效的括号
+//给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+//
+//有效字符串需满足：
+//
+//左括号必须用相同类型的右括号闭合。
+//左括号必须以正确的顺序闭合。
+//注意空字符串可被认为是有效字符串。
+//
+//示例 1:
+//
+//输入: "()"
+//输出: true
+
+class Solution_validParentheses {
+public:
+    bool isValid(string s) {
+        unordered_map<char,int> mp;
+        mp['[']=']';
+        mp['(']=')';
+        mp['{']='}';
+        stack<char> st;
+        for(int i=0;i<s.size();i++){
+            char ch=s[i];
+            if(mp.count(ch)>0){
+                st.push(ch);//push in stack. Stack is used to preserve the left one
+            }
+            else if(ch==']'||ch=='}'||ch==')'){
+                if(!st.empty()&&ch==mp[st.top()]){//if stack is empty it must be wrong and if ch matches the the top of the stack it is true.
+                    st.pop();
+                }
+                else
+                    return false;
+            }
+            else return false;
+        }
+        if(st.empty()) return true;
+        else return false;
+    }
+};
+
+
+
+//22. 括号生成
+//数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+//
+//
+//
+//示例：
+//
+//输入：n = 3
+//输出：[
+//    "((()))",
+//    "(()())",
+//    "(())()",
+//    "()(())",
+//    "()()()"
+//    ]
+
+class Solution_generateParenthesis {
+    //使用C++，基本结构和上面一样，不过这里 lc 和 rc 分别表示左括号的个数和右括号的个数。vector的push_back()方法调用的时候实际上是使用的值传递，也就是会进行赋值到vector里。
+    //回溯法的代码套路是使用两个变量： res 和 path，res 表示最终的结果，path 保存已经走过的路径。如果搜到一个状态满足题目要求，就把 path 放到 res 中。
+    
+    
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        dfs(n,"",res,0,0);
+        return res;
+    }
+    void dfs(int n,string path,vector<string> &res,int l,int r){
+        if(r>l||l>n||r>n) return;
+        if(l==r&&l==n){
+            res.push_back(path);
+            return;
+        }
+        dfs(n,path + '(',res, l+1,r);
+        dfs(n,path + ')',res, l,r+1);
+    }
+};
+
+
+//回溯法个人理解
+//        （
+//        / \
+//       ((  ()
+//       /\  /\
+//
+//   ((( (() ()( ())
+//满足于条件的直接加入res中间，不满足的直接break掉，可以作为模板j记住
