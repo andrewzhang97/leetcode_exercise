@@ -773,6 +773,7 @@ public:
         dfs(n,path + '(',res, l+1,r);
         dfs(n,path + ')',res, l,r+1);
     }
+    
 };
 
 
@@ -784,3 +785,64 @@ public:
 //
 //   ((( (() ()( ())
 //满足于条件的直接加入res中间，不满足的直接break掉，可以作为模板j记住
+
+
+//leetcode 51 N-Queen
+//51. N皇后
+//n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+//输入: 4
+//输出: [
+//     [".Q..",  // 解法 1
+//      "...Q",
+//      "Q...",
+//      "..Q."],
+//
+//     ["..Q.",  // 解法 2
+//      "Q...",
+//      "...Q",
+//      ".Q.."]
+//     ]
+//解释: 4 皇后问题存在两个不同的解法。
+
+class Solution_NQueen {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> res;
+        vector<string> board(n,'.');
+        dfs(res,board,0);
+        return res;
+    }
+    void dfs(vector<vector<string>> &res,vector<string> &board,int row){
+        if(row==board.size(){
+            res.push_back(board);
+            return;
+        }
+        for(int col=0;col<board[row].size();i++){
+            if(!isVaild(board,row,col)){
+                continue;
+            }
+            board[row][col]='Q';
+            dfs(res,board,row+1);
+            board[row][col]='.';
+        }
+    }
+    bool isValid(vector<string> board,int row,int col){
+        for(int i=0;i<row;i++){
+            if(board[i][col]=='Q'){
+                return false;
+            }
+        }
+        for(int i=row-1,j=col+1;i>=0&&j<board[row].size();i--,j++){
+            if(board[i][j]=='Q'){
+                return false;
+            }
+        }
+        for(int i=row-1,j=col-1;i>=0&&j>=0;i--,j--){
+            if(board[i][j]=='Q'){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
