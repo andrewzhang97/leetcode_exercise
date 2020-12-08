@@ -846,3 +846,74 @@ public:
     }
 };
 
+//leetcode 739
+//请根据每日 气温 列表，重新生成一个列表。对应位置的输出为：要想观测到更高的气温，至少需要等待的天数。如果气温在这之后都不会升高，请在该位置用 0 来代替。
+//
+//例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
+//使用单调栈
+class Solution_dailyTemperatures {
+public:
+    vector<int> dailyTemperatures(vector<int>& T) {
+        vector<int> res(T.size(),0);
+        stack<int> temp;
+        for(int i=0;i<T.size();i++){
+            while(!temp.empty()&&T[i]>T[temp.top()]){//这一步是单调栈的关键
+                res[temp.top()]=i-temp.top();
+                temp.pop();
+            }
+            temp.push(i);
+        }
+        return res;
+    }
+};
+           
+//402. 移掉K位数字
+//给定一个以字符串表示的非负整数 num，移除这个数中的 k 位数字，使得剩下的数字最小。
+//
+//注意:
+//
+//num 的长度小于 10002 且 ≥ k。
+//num 不会包含任何前导零。
+//示例 1 :
+//
+//输入: num = "1432219", k = 3
+//输出: "1219"
+//解释: 移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219。
+//示例 2 :
+//
+//输入: num = "10200", k = 1
+//输出: "200"
+//解释: 移掉首位的 1 剩下的数字为 200. 注意输出不能有任何前导零。
+//示例 3 :
+// 单调栈
+//输入: num = "10", k = 2
+//输出: "0"
+//解释: 从原数字移除所有的数字，剩余为空就是0。
+class Solution_removeKdigits {
+public:
+    string removeKdigits(string num, int k) {
+        stack<char> s;
+        string res;
+        for(int i=0;i<num.size();i++){
+            while(k&&!s.empty()&&s.top()>num[i]){
+                s.pop();
+                k--;
+            }
+            s.push(num[i]);
+            if(num[i]=='0'&&s.empty()){
+                continue;
+            }
+        }
+        while(!s.empty()){
+            if(k>0) k--;
+            else if(k==0){
+                res=res+s.top();
+                s.pop();
+            }
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
+           
+ 
